@@ -1,8 +1,9 @@
 import logging
 
 import config
-from phone import Phone
+from controller import Controller
 from gui import Gui
+from phone import Phone
 
 def main():
     import config
@@ -11,6 +12,8 @@ def main():
     phone.register(config)
 
     gui = Gui()
+
+    controller = Controller(phone, gui)
 
     import time
     while True:

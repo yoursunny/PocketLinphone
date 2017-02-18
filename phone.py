@@ -1,8 +1,11 @@
 import linphone
 import logging
+from pyee import EventEmitter
 
-class Phone:
+class Phone(EventEmitter):
     def __init__(self):
+        EventEmitter.__init__(self)
+
         linphone.set_log_handler(self._logHandler)
         callbacks = {'call_state_changed': self._callStateHandler}
         self.core = linphone.Core.new(callbacks, None, None)
@@ -63,12 +66,14 @@ class Phone:
         remoteUri = call.remote_address.as_string_uri_only()
         if state == linphone.CallState.IncomingReceived:
             print 'Incoming call from {0}'.format(remoteUri)
-            self.accept()
+            self.emit('incoming', remoteUri)
         elif state == linphone.CallState.Connected:
             print 'Connected with {0}'.format(remoteUri)
+            self.emit('connected', remoteUri)
         elif state == linphone.CallState.End:
             print 'Call with {0} ended'.format(remoteUri)
+            self.emit('end', remoteUri)
         elif state == linphone.CallState.Released:
-            print 'Call with {0} relased'.format(remoteUri)
+            print 'Call with {0} released'.format(remoteUri)
         else:
             print 'Event {0} for call from {0}'.format(state, remoteUri)

@@ -1,4 +1,5 @@
 import Tkinter as tk
+from pyee import EventEmitter
 
 class Gui:
     def __init__(self):
@@ -27,10 +28,12 @@ class Gui:
     def showIncomingCall(self, remoteUri):
         self.frame = IncomingCallFrame(self.root, remoteUri)
         self._show()
+        return self.frame
 
     def showInCall(self, remoteUri):
         self.frame = InCallFrame(self.root, remoteUri)
         self._show()
+        return self.frame
 
 class DialPadFrame(tk.Frame):
     def __init__(self, master):
@@ -42,9 +45,10 @@ class DialPadFrame(tk.Frame):
         self.PLACEHOLDER = tk.Label(self, text='123\n456\n789\n*0#', font=(None, 32))
         self.PLACEHOLDER.grid(sticky=tk.N+tk.E+tk.S+tk.W)
 
-class IncomingCallFrame(tk.Frame):
+class IncomingCallFrame(tk.Frame, EventEmitter):
     def __init__(self, master, remoteUri):
         tk.Frame.__init__(self, master)
+        EventEmitter.__init__(self)
 
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
@@ -67,13 +71,16 @@ class IncomingCallFrame(tk.Frame):
 
     def accept(self):
         print 'ACCEPT'
+        self.emit('accept')
 
     def decline(self):
         print 'DECLINE'
+        self.emit('decline')
 
-class InCallFrame(tk.Frame):
+class InCallFrame(tk.Frame, EventEmitter):
     def __init__(self, master, remoteUri):
         tk.Frame.__init__(self, master)
+        EventEmitter.__init__(self)
 
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
@@ -96,6 +103,7 @@ class InCallFrame(tk.Frame):
 
     def hangup(self):
         print 'HANGUP'
+        self.emit('hangup')
 
 def demo():
     gui = Gui()

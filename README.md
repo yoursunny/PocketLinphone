@@ -7,6 +7,7 @@ SIP softphone for PocketCHIP
 Install dependencies:
 
     sudo apt-get install python-pip python-tk linphone-nogtk
+    sudo pip install pyee
     wget https://www.linphone.org/releases/linphone-python-raspberry/linphone4raspberry-3.9.1-cp27-none-any.whl
     sudo pip install linphone4raspberry-3.9.1-cp27-none-any.whl
 
